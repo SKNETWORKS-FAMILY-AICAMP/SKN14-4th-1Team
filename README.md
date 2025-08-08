@@ -97,7 +97,6 @@ pip install -r requirements.txt
 .env 파일을 프로젝트 루트에 생성하고, 아래 항목들을 입력합니다.
 ```
 OPENAI_API_KEY=your_openai_key
-DECODING_KEY=your_decoding_key
 ```
 
 ### 3️⃣ FAISS 인덱스 파일 다운로드
