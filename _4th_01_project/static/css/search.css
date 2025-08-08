@@ -1,0 +1,144 @@
+:root {
+  --nw-green: #27AE60;
+  --nw-text: #1f2937;
+  --nw-border: #ffffff;
+  --primary-color: #667eea;
+  --secondary-color: #a8edea;
+  --accent-color: #d3f8e2;
+  --search-bar-height: 48px;
+
+}
+
+
+/* ✅ 메인 상단 박스 통일 */
+.main-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+/* ✅ 헤더 디자인 통일 */
+.page-header {
+  /* background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%); */
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+  padding: 2rem;
+  text-align: center;
+  color: var(--nw-text);
+  /* border-radius: 12px; */
+  border-radius: 20px 20px 0 0;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  margin-bottom: 0;
+  color: var(--nw-text);
+}
+
+/* ✅ 이미지 */
+.uploaded-image {
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.search-result-area {
+  padding: 1.5rem 2rem 2rem 2rem; /* 위/오른쪽/아래/왼쪽 */
+}
+
+.image-container {
+  max-width: 100px;
+}
+
+/* ✅ 카메라 버튼 */
+.camera-btn {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #764ba2 100%);
+  border: none;
+  padding: 0.5rem;
+  /* height: 38px; */
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  font-size: 1.3rem;
+  color: rgb(255, 255, 255);
+  height: var(--search-bar-height);
+  width: var(--search-bar-height);
+}
+
+.camera-btn:hover {
+  background-color: #edebeb;
+}
+
+/* ✅ 아코디언 마지막 마진 */
+.accordion-item:last-child {
+  margin-bottom: 1rem;
+}
+
+/* ✅ 로딩 인디케이터 (텍스트 정렬 개선) */
+#loading-indicator p {
+  color: var(--nw-text);
+}
+
+.btn-search {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #764ba2 100%);
+  border: none;
+  border-radius: 50px;
+  padding: 12px 30px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  height: var(--search-bar-height);
+  min-height: var(--search-bar-height);
+  max-height: var(--search-bar-height);
+
+}
+
+.search-input {
+  width: 50%;                   /* 원하는 비율/px 값 지정 가능 */
+  min-width: 240px;
+  max-width: 520px;
+  min-height: var(--search-bar-height);
+  max-height: var(--search-bar-height);
+  padding: 0.7rem 1.2rem;
+  border-radius: 12px;
+  border: 2px solid #eee;
+  background: #fff;
+  color: #23232e;
+  font-size: 1.08rem;
+  font-weight: 400;
+  box-shadow: 0 1.5px 8px rgba(160,160,200,0.07);
+  transition: 
+    border-color 0.2s, 
+    box-shadow 0.2s;
+}
+
+.search-input:focus {
+  border-color: #a18cd1;
+  outline: none;
+  box-shadow: 0 0 0 2.5px rgba(161, 140, 209, 0.10);
+}
+
+/* 모바일 대응 (원하는 경우) */
+@media (max-width: 768px) {
+  .search-input {
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+  }
+}

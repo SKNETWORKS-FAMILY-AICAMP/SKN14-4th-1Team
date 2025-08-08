@@ -1,0 +1,151 @@
+{% extends "../layout/base.html" %}
+
+{% block style %}
+    <style>
+        .user-info-box {
+            background-color: #ffffffff;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="user-info-box p-4 rounded shadow-sm m-5">
+    <h3 class="my-3 border-bottom pb-2 d-flex justify-content-center">회원정보 수정</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" action="">
+                {% csrf_token %}
+                <!-- 사용자 이름 (아이디) -->
+                <div class="mb-3">
+                    <label for="username">사용자 이름</label>
+                    <input type="text" class="form-control" name="username" id="username" value="{{ user.username }}" disabled>
+                </div>
+
+                <!-- 이메일 -->
+                <div class="mb-3">
+                    <label for="email">이메일</label>
+                    <input type="text" class="form-control" name="email" id="email" value="{{ user.email }}">
+                </div>
+
+                <!-- 생년월일 -->
+                <div class="mb-3">
+                    <label for="birthday">생년월일</label>
+                    <input type="date" class="form-control" name="birthday" id="birthday" value="{{ user.userdetail.birthday |date:'Y-m-d' }}">
+                </div>
+        </div>
+
+        <div class="col-md-6">
+            <!-- 성별 -->
+            <div class="mb-3">
+                <label class="form-label">성별</label>
+                <select class="form-select" id="gender" name="gender" onchange="togglePregnantCheckbox()">
+                    <option value="M" {% if user.userdetail.gender == 'M' %}selected{% endif %}>남성</option>
+                    <option value="F" {% if user.userdetail.gender == 'F' %}selected{% endif %}>여성</option>
+                </select>
+            </div>
+
+            <!-- 임신 여부 (여성만 표시) -->
+            <div class="mb-3 form-check" id="pregnant-check" style="display: none;">
+                <input type="checkbox" class="form-check-input" id="pregnant" name="is_pregnant" {% if user.userdetail.is_pregnant %}checked{% endif %}>
+                <label class="form-check-label" for="pregnant">임신 여부</label>
+            </div>
+
+            <!-- 건강 관심사 -->
+            <h5>건강 관심사</h5>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="immunity" name="health_concerns" value="면역력 강화"> <label class="form-check-label" for="immunity">면역력 강화</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="skin" name="health_concerns" value="피부 건강"> <label class="form-check-label" for="skin">피부 건강</label> 
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="energy" name="health_concerns" value="에너지/피로 회복"> <label class="form-check-label" for="energy">에너지/피로 회복</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="joint" name="health_concerns" value="관절 건강"> <label class="form-check-label" for="joint">관절 건강</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="digest" name="health_concerns" value="소화/장 건강"> <label class="form-check-label" for="digest">소화/장 건강</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="stress" name="health_concerns" value="스트레스 관리"> <label class="form-check-label" for="stress">스트레스 관리</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4">저장하기</button>
+        </form>
+
+            <a href="{% url 'uauth:mypage' %}" class="btn btn-outline-gradient">
+                <i class="fas fa-user me-2"></i>마이페이지
+            </a>        
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    function togglePregnantCheckbox() {
+        const genderSelect = document.getElementById("gender");
+        const pregnantDiv = document.getElementById("pregnant-check");
+
+        if (genderSelect.value === "F") {
+            pregnantDiv.style.display = "block";
+        } else {
+            pregnantDiv.style.display = "none";
+            document.getElementById("pregnant").checked = false;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        togglePregnantCheckbox();
+
+        const form = document.querySelector("form");
+        const useremail = document.getElementById("email");
+        const birthday = document.getElementById("birthday");
+
+        const emailError = document.createElement("div");
+        const birthdayError = document.createElement("div");
+
+        [emailError, birthdayError].forEach(el => {
+            el.classList.add("text-danger", "mt-1");
+            el.style.fontSize = "0.8em";
+        });
+
+        useremail.parentNode.appendChild(emailError);
+        birthday.parentNode.appendChild(birthdayError);
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault(); // 기본 제출 막기
+
+            emailError.textContent = "";
+
+            useremail.classList.remove("is-invalid");
+
+            const uemail = useremail.value.trim();
+
+            let hasError = false;
+
+            if (uemail.length < 1) {
+                emailError.textContent = "이메일을 입력해주세요.";
+                useremail.classList.add("is-invalid");
+                hasError = true;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(uemail)) {
+                emailError.textContent = "유효한 이메일 형식이 아닙니다.";
+                useremail.classList.add("is-invalid");
+                hasError = true;
+            }
+
+            // 생일 입력 확인
+            if (!birthday.value) {
+                birthdayError.textContent = "생년월일을 입력해주세요.";
+                birthday.classList.add("is-invalid");
+                hasError = true;
+            }
+
+            if (!hasError) {
+                form.submit(); // 검증 완료 시 제출
+            }
+        });
+    });
+</script>
+{% endblock script %}

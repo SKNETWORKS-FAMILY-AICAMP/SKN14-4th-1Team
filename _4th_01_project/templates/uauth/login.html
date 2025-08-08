@@ -1,0 +1,67 @@
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock style %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 NutriWise - 로그인</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Back to Home Button -->
+    <a href="{% url 'app:main' %}" class="back-to-home">
+        <i class="fas fa-arrow-left me-2"></i>홈으로
+    </a>
+
+    <div class="login-container">
+        <!-- Login Header -->
+        <div class="login-header">
+            <h1><i class="fas fa-leaf me-2"></i>NutriWise</h1>
+        </div>
+
+        <!-- Login Body -->
+        <div class="login-body">
+            {% include "../layout/form_errors.html" %}
+            <form method="post" action="{% url 'uauth:login' %}">
+            {% csrf_token %}
+
+                <!-- Email Input -->
+                <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                    {% comment %} <input type="email" class="form-control with-icon pl-4" name="email" placeholder="이메일 주소" required> {% endcomment %}
+                    <input type="username" class="form-control with-icon pl-4" name="username" placeholder="ID" required>
+                </div>
+
+                <!-- Password Input -->
+                <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    <input type="password" class="form-control with-icon" name="password" placeholder="비밀번호" required>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="btn btn-gradient mt-3">
+                    <i class="fas fa-sign-in-alt me-2"></i>로그인
+                </button>
+
+            </form>
+
+            <a href="{% url 'uauth:signup' %}" class="btn btn-outline-gradient">
+                <i class="fas fa-user-plus me-2"></i>회원가입
+            </a>
+        </div>
+    </div>
+</body>

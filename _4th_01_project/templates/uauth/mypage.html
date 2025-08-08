@@ -1,0 +1,48 @@
+{% extends "../layout/base.html" %}
+
+{% block style %}
+    <style>
+        .user-info-box {
+            background-color: #ffffff;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="user-info-box p-4 rounded shadow-sm m-5">
+    <h3 class="my-3 border-bottom pb-2 d-flex justify-content-center">마이페이지</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>사용자 이름:</strong> {{ user.username }}</p>
+            <p><strong>이메일:</strong> {{ user.email }}</p>
+            <p><strong>생년월일:</strong> {{ user.userdetail.birthday }}</p>
+        </div>
+
+        <div class="col-md-6">
+            <p><strong>성별:</strong> 
+            {% if user.userdetail.gender == 'F' %}
+                여성
+            {% else %}
+                남성
+            {% endif %}
+            </p>
+
+            {% if user.userdetail.gender == 'F' %}
+                <p><strong>임신 여부:</strong> 
+                {% if user.userdetail.is_pregnant %}
+                    O
+                {% else %}
+                    X
+                {% endif %}
+                </p>
+            {% endif %}
+            
+            <p><strong>건강 관심사</strong>
+            {{ user.userdetail.health_concerns|default:"등록된 건강 관심사가 없습니다." }}</p>
+        </div>
+    </div>
+    <div class="mt-4 text-center">
+        <a href="{% url 'uauth:mypage_edit' %}" class="btn btn-primary">프로필 수정</a>
+    </div>
+</div>
+{% endblock content %}

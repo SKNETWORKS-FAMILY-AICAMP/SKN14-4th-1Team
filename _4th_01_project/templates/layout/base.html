@@ -1,0 +1,44 @@
+{% load static %}
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🌿 NutriWise - AI 영양제 추천</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+
+    <!-- Page CSS -->
+    {% block extra_head %}{% endblock extra_head %}
+    {% block style %}{% endblock style %}
+</head>
+<body>
+<div class="wrapper">
+    <!-- Navigation -->
+    {% include "./nav.html" %}
+
+    <!-- 본문 -->
+    <main>
+        {% block content %}{% endblock content %}
+    </main>
+
+    <!-- Footer -->
+    {% include "./footer.html" %}
+</div>
+
+<!-- Bootstrap JS (Popper 포함된 번들 버전) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<!-- 페이지별 스크립트 -->
+{% block script %}{% endblock script %}
+
+</body>
+</html>

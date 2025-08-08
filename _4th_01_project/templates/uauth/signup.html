@@ -1,0 +1,236 @@
+{% extends "../layout/base.html" %}
+
+{% block style %}
+    <style>
+        .user-info-box {
+            background-color: #ffffffff;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="user-info-box p-4 rounded shadow-sm m-5">
+    <h3 class="my-3 border-bottom pb-2 d-flex justify-content-center">회원가입</h3>
+    <div class="row">
+        <div class="col-md-6">
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username">사용자 이름*</label>
+                <input type="text" class="form-control" name="username" id="username" value="">
+            </div>
+            <div class="mb-3">
+                <label for="password1">비밀번호*</label>
+                <input type="password" class="form-control" name="password1" id="password1" value="">
+                <small class="text-muted" style="font-size: 0.7em; color: #bbb; padding-left: 5px;">
+                    ※ 비밀번호는 최소 8자 이상이어야 하며, 아이디와 비슷하거나 너무 흔한 비밀번호, 숫자만으로 구성된 비밀번호는 사용할 수 없습니다.
+                </small>
+            </div>
+            
+            <div class="mb-3">
+                <label for="password2">비밀번호 확인*</label>
+                <input type="password" class="form-control" name="password2" id="password2" value="">
+            </div>
+
+            <div class="mb-3">
+                <label for="email">이메일*</label>
+                <input type="text" class="form-control" name="email" id="email" value="">
+            </div>
+
+            <div class="mb-3">
+                <label for="birthday">생년월일*</label>
+                <input type="date" class="form-control" name="birthday" id="birthday" value="">
+            </div>
+        </div>
+            
+        <div class="col-md-6">
+            <!-- 사용자 정보 입력 -->
+            <div class="mb-3">                <label class="form-label">성별*</label>
+                <select class="form-select" id="gender" name="gender" onchange="togglePregnantCheckbox()">
+                    <option value="M">남성</option>
+                    <option value="F">여성</option>
+                </select>
+            </div>
+
+            <div class="mb-3 form-check" id="pregnant-check" style="display: none;">
+                <input type="checkbox" class="form-check-input" id="pregnant" name="is_pregnant">
+                <label class="form-check-label" for="pregnant">임신 여부</label>
+            </div>
+            
+            <h5>건강 관심사</h5>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="immunity" name="health_concerns" value="면역력 강화"> <label class="form-check-label" for="immunity">면역력 강화</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="skin" name="health_concerns" value="피부 건강"> <label class="form-check-label" for="skin">피부 건강</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="energy" name="health_concerns" value="에너지/피로 회복"> <label class="form-check-label" for="energy">에너지/피로 회복</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="joint" name="health_concerns" value="관절 건강"> <label class="form-check-label" for="joint">관절 건강</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="digest" name="health_concerns" value="소화/장 건강"> <label class="form-check-label" for="digest">소화/장 건강</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="stress" name="health_concerns" value="스트레스 관리"> <label class="form-check-label" for="stress">스트레스 관리</label>
+            </div>
+        </div>
+            
+            <button type="submit" class="btn btn-primary">회원가입하기</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+
+<script>
+    const signupFailed = {{ signup_failed|yesno:"true,false" }};
+    
+    if (signupFailed) {
+        alert("회원가입에 실패했습니다. 너무 흔한 비밀번호는 사용할 수 없습니다.");
+    }
+
+    function togglePregnantCheckbox() {
+        const genderSelect = document.getElementById("gender");
+        const pregnantDiv = document.getElementById("pregnant-check");
+
+        if (genderSelect.value === "F") {
+            pregnantDiv.style.display = "block";
+        } else {
+            pregnantDiv.style.display = "none";
+            document.getElementById("pregnant").checked = false;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        togglePregnantCheckbox();
+
+        const form = document.querySelector("form");
+        const password1 = document.getElementById("password1");
+        const password2 = document.getElementById("password2");
+        const username = document.getElementById("username");
+        const useremail = document.getElementById("email");
+        const birthday = document.getElementById("birthday");
+
+        const usernameError = document.createElement("div");
+        const emailError = document.createElement("div");
+        const pw1Error = document.createElement("div");
+        const pw2Error = document.createElement("div");
+        const birthdayError = document.createElement("div");
+
+        [usernameError, emailError, pw1Error, pw2Error, birthdayError].forEach(el => {
+            el.classList.add("text-danger", "mt-1");
+            el.style.fontSize = "0.8em";
+        });
+
+        username.parentNode.appendChild(usernameError);
+        useremail.parentNode.appendChild(emailError);
+        password1.parentNode.appendChild(pw1Error);
+        password2.parentNode.appendChild(pw2Error);
+        birthday.parentNode.appendChild(birthdayError);
+
+        let isUsernameAvailable = true;  // 사용자 이름 중복 결과 상태 저장
+
+        // 사용자 이름 ajax 중복 검사
+        username.addEventListener("input", function () {
+            const uname = username.value.trim();
+
+            usernameError.textContent = "";
+            username.classList.remove("is-invalid");
+            isUsernameAvailable = true;
+
+            if (uname.length > 0) {
+                fetch(`{% url 'uauth:check_username' %}?username=${encodeURIComponent(uname)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.available) {
+                            usernameError.textContent = "이미 사용 중인 사용자 이름입니다.";
+                            username.classList.add("is-invalid");
+                            isUsernameAvailable = false;
+                        }
+                    })
+                    .catch(() => {
+                        usernameError.textContent = "사용자 이름 확인 중 오류가 발생했습니다.";
+                        username.classList.add("is-invalid");
+                        isUsernameAvailable = false;
+                    });
+            }
+        });
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault(); // 기본 제출 막기
+
+            usernameError.textContent = "";
+            emailError.textContent = "";
+            pw1Error.textContent = "";
+            pw2Error.textContent = "";
+
+            username.classList.remove("is-invalid");
+            useremail.classList.remove("is-invalid");
+            password1.classList.remove("is-invalid");
+            password2.classList.remove("is-invalid");
+
+            const uname = username.value.trim();
+            const uemail = useremail.value.trim();
+            const pwd = password1.value.trim();
+            const pwd2 = password2.value.trim();
+
+            let hasError = false;
+
+            if (uname.length < 1) {
+                usernameError.textContent = "사용자 이름은 최소 1자 이상이어야 합니다.";
+                username.classList.add("is-invalid");
+                hasError = true;
+            } else if (!isUsernameAvailable) {
+                usernameError.textContent = "이미 사용 중인 사용자 이름입니다.";
+                username.classList.add("is-invalid");
+                hasError = true;
+            }
+
+            if (uemail.length < 1) {
+                emailError.textContent = "이메일을 입력해주세요.";
+                useremail.classList.add("is-invalid");
+                hasError = true;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(uemail)) {
+                emailError.textContent = "유효한 이메일 형식이 아닙니다.";
+                useremail.classList.add("is-invalid");
+                hasError = true;
+            }
+
+            if (pwd.length < 8) {
+                pw1Error.textContent = "비밀번호는 최소 8자 이상이어야 합니다.";
+                password1.classList.add("is-invalid");
+                hasError = true;
+            } else if (/^\d+$/.test(pwd)) {
+                pw1Error.textContent = "비밀번호는 숫자로만 이루어질 수 없습니다.";
+                password1.classList.add("is-invalid");
+                hasError = true;
+            } else if (uname && pwd.includes(uname)) {
+                pw1Error.textContent = "비밀번호에 사용자 이름을 포함할 수 없습니다.";
+                password1.classList.add("is-invalid");
+                hasError = true;
+            }
+
+            if (pwd !== pwd2) {
+                pw2Error.textContent = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
+                password2.classList.add("is-invalid");
+                hasError = true;
+            }
+
+            // 생일 입력 확인
+            if (!birthday.value) {
+                birthdayError.textContent = "생년월일을 입력해주세요.";
+                birthday.classList.add("is-invalid");
+                hasError = true;
+            }
+
+            if (!hasError) {
+                form.submit(); // 검증 완료 시 제출
+            }
+        });
+    });
+</script>
+{% endblock script %}

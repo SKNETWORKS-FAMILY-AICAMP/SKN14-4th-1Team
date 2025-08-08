@@ -1,0 +1,140 @@
+:root {
+  --hero-min-h: 92vh;
+  --nw-green: #27ae60;
+  --nw-yellow: #f1c40f;
+  --nw-text:#1f2937; 
+  --nw-purple:#764ba2;
+}
+
+body {
+  background: #fff;
+}
+
+
+
+.brand_logo_link {
+  position: fixed;
+  top: 12px;
+  left: 14px; /* 기존 값 */
+  padding: 5px 0;
+  margin-left: 24px; /* ✅ 왼쪽 간격 추가 */
+  color: #ffffff;
+  font: 20px system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  pointer-events: none;
+  font-weight: bold;
+}
+/* 실제 클릭 요소 */
+/* .brand_logo {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 12px;
+  color: var(--nw-green); 
+  transition: transform 0.15s ease;
+}*/
+.brand_logo .brand_logo_link,
+.brand_logo .brand_logo_link:visited,
+.brand_logo .brand_logo_link:hover,
+.brand_logo .brand_logo_link:active {
+  color: #000000;
+  text-decoration: none;
+}
+
+/* 아이콘/텍스트 크기 (필요 시만 조절) */
+.brand_logo_emoji {
+  font-size: 18px;
+  line-height: 1;
+}
+.brand_logo_text {
+  font-weight: 800; /* 폰트는 기존 것 사용 */
+  font-size: 18px;
+  letter-spacing: 0.2px;
+  color: var(--nw-text);
+}
+
+/* 2) 공통 버튼 베이스 */
+.nw-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  color: #fff;
+  background: var(--nw-purple);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.nw-btn:hover {
+  filter: brightness(0.95);
+}
+
+.nw-btn--yellow {
+  background: var(--nw-purple) !important;
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.nw-btn--yellow:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+/* 3) 로그인 영역 클릭 허용 (현재 .btn가 아니라 .nw-btn을 써서 클릭이 막혀 있음) */
+.login {
+  pointer-events: none;
+}
+.login .nw-btn {
+  pointer-events: auto;
+} /* ← .btn 대신 .nw-btn로 변경 */
+
+.main_text {
+  position: relative;
+  min-height: var(--hero-min-h);
+  display: grid;
+  place-items: center; /* 가로/세로 중앙 */
+  text-align: center;
+  padding: 3rem 1rem;
+  overflow: hidden;
+}
+.main_text-inner {
+  max-width: 880px;
+  width: 100%;
+  margin-inline: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.main_text::after {
+  content: "🌿";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0; /* 본문 뒤 */
+  pointer-events: none;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji",
+    sans-serif;
+  font-size: clamp(160px, 34vw, 560px); /* 크기 */
+  line-height: 1;
+  opacity: 0.1; /* 옅게 (0.06~0.14 조절) */
+  filter: blur(0.2px); /* 살짝 부드럽게 (선택) */
+}
+/* 본문은 위로 */
+.main_text > * {
+  position: relative;
+  z-index: 1;
+}
